@@ -4,7 +4,7 @@ from django.views.decorators.http import require_POST
 from shop.models import Product
 from .cart import Cart
 from .forms import CartAddProductForm
-# from coupons.forms import CouponApplyForm
+from coupons.forms import CouponApplyForm
 
 
 def cart_detail(request):

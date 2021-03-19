@@ -4,7 +4,14 @@ from .models import Category, Product
 
 
 def home(request):
-    return render(request, 'shop/home.html', {})
+
+    # products to be displayed in featured section
+    featured = Product.objects.all().filter(featured=True)
+
+    context = {
+        'featured': featured
+    }
+    return render(request, 'shop/home.html', context)
 
 
 def product_list(request, category_slug=None):

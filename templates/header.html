@@ -11,20 +11,30 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto"> 
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a href="{% url 'shop:product_list' %}" class="nav-link">Products</a>
+                    <a href="{% url 'shop:product_list' %}" class="nav-link mx-1">Products</a>
                 </li>
                 <li class="nav-item">
                     <span>
-                        <a class="nav-link active" aria-current="page" href="{% url 'cart:cart_detail' %}">
-                            <i class="bi bi-basket mr-1"></i> |
-                            {% if cart %}
-                                Empty
+                        {% with total_items=cart|length %}
+                            {% if total_items > 0 %}
+                                <a class="nav-link active"
+                                   aria-current="page"
+                                   href="{% url 'cart:cart_detail' %}">
+                                  <i class="bi bi-basket mx-1"></i>
+                                    {{ total_items }} item{{ total_items|pluralize }}
+                                    ${{ cart.get_total_price }}
+                                </a>
                             {% else %}
-                                0.00
+                                <a class="nav-link"
+                                   aria-current="page"
+                                   href="">
+                                  <i class="bi bi-basket mx-1"></i>
+                                    Your cart is empty
+                                </a>
                             {% endif %}
-                        </a>
+                        {% endwith %}
                     </span>
                 </li>
             </ul>
