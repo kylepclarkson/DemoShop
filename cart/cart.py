@@ -4,6 +4,7 @@ from django.conf import settings
 from shop.models import Product
 # from coupons.models import Coupon
 
+
 class Cart(object):
 
     """
