@@ -1,7 +1,7 @@
 {% load  static %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">The DemoShop</a>
+        <a class="navbar-brand" href="{% url 'shop:home' %}">The DemoShop</a>
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navbarNav"
@@ -11,10 +11,13 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto"> 
+                <li class="nav-item">
+                    <a href="{% url 'shop:product_list' %}" class="nav-link">Products</a>
+                </li>
                 <li class="nav-item">
                     <span>
-                        <a class="nav-link active" aria-current="page" href="#">
+                        <a class="nav-link active" aria-current="page" href="{% url 'cart:cart_detail' %}">
                             <i class="bi bi-basket mr-1"></i> |
                             {% if cart %}
                                 Empty

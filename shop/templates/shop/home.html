@@ -1,0 +1,38 @@
+{# === The home page of the shop === #}
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+
+    {# === hero section === #}
+    <div id="home-hero" class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+        <div class="col-lg-6 col-md-6 col-xs-8 my-lg-5 mx-auto text-center">
+        <h1 class="fw-light">The Best DemoShop Around</h1>
+        <p class="lead text-muted">
+            Welcome to DemoShop - a demonstration of what can be built with Python and Django.
+            View our products, test out our functionality, and even buy an unemployed coder a cup
+            of coffee!
+        </p>
+        <p>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-primary my-2">All Products</a>
+            <a href="#me" class="btn btn-secondary my-2">Featured Items</a>
+        </p>
+        </div>
+    </div>
+
+    {# === About === #}
+    <div id="home-about" class="min-vh-100">
+        About
+    </div>
+
+    {# === Featured items === #}
+    <div class="min-vh-100" id="me">
+        Featured item
+    </div>
+
+{% endblock %}
