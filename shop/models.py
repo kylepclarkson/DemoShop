@@ -35,7 +35,8 @@ class Product(models.Model):
     # use DecimalField instead of float to avoid rounding issues.
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=0)
-    # available = models.BooleanField(default=True)
+    # false if product cannot be bought.
+    available = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

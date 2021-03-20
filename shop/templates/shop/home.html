@@ -38,7 +38,8 @@
                 {% include 'shop/product/product_card.html' %}
             {% endfor %}
         </div>
-    </div>
+    </div> {# ===== End featured ===== #}
+
 
     {# ===== About Section ===== #}
     <div class="container min-vh-100 py-3">
@@ -71,7 +72,6 @@
             </div>
         </div>
 
-        {# ===== Fea #}
         <hr>
         <div class="row justify-content-center align-items-center py-3">
             <div class="col-md-7">
@@ -79,15 +79,13 @@
                     <span class="text-muted">Here when needed most.</span></h2>
                 <p class="lead">
                     We thrive ourselves in support our local communities just how
-                    they support us. For over 20 years we contribute to walking-dogs which connects
-                    inner city dogs to children that need to be walked.
+                    they support us. For over 20 years we contribute to walking-dogs, the charity
+                    that pairs adventurous dogs with children that need to be walked.
                 </p>
             </div>
             <div class="col-md-5">
                 <img src="{% static 'personal/dog.jpg' %}" class="" alt="">
             </div>
         </div>
-
-    </div><!-- /.container -->
-
+    </div>
 {% endblock %}

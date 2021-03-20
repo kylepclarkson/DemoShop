@@ -1,25 +1,58 @@
-{% extends "shop/base.html" %}
+{% extends "base.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}
     | {{ product.name }}
 {% endblock %}
 
 {% block content %}
-    <div class="product-detail">
-        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
-        <h1>{{ product.name }}</h1>
-        <h2>
-            <a href="{{ product.category.get_absolute_url }}">
-                {{ product.category }}
-            </a>
-        </h2>
-        <p class="price">${{ product.price }}</p>
-        <form action="{% url "cart:cart_add" product.id %}" method="POST">
-            {% csrf_token %}
-            {{ cart_product_form }}
-            <input type="submit" value="Add to cart">
-        </form>
-        {{ product.description|linebreaks }}
+    <div class="container min-vh-100 align-self-center">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-4 my-5">
+                {% thumbnail product.image "640x480" crop='center' as im %}
+                    <img class="img-fluid p-1" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                {% endthumbnail %}
+            </div>
+            <div class="col-md-8 px-5 mb-5">
+                <div class="row justify-content-between">
+                    <div class="col-8">
+                        <h1>{{ product.name }}</h1>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-end">
+                            {% if product.quantity > 0 %}
+                                <p><strong>${{ product.price }}</strong></p>
+                            {% else %}
+                                <p class="text-danger"><strong>SOLD OUT</strong></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-between">
+                    <div class="col-8">
+                        <h3>
+                            <a href="{{ product.category.get_absolute_url }}">
+                                {{ product.category }}
+                            </a>
+                        </h3>
+                    </div>
+                    <div class="col-4 text-end">
+                        <h3 class="text-end">TODO</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <p>{{ product.description|linebreaks }}</p>
+                </div>
+                <div class="row text-end">
+                    <form action="{% url "cart:cart_add" product.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ cart_product_form }}
+                        <input class="btn btn-primary" type="submit" value="Add to cart">
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock %}

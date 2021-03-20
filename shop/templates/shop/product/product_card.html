@@ -21,7 +21,7 @@
             {% endif %}
         </div>
         <p class="card-text">
-            {{ product.description }}
+            {{ product.description|truncatewords:30 }}
         </p>
         <div class="d-flex justify-content-between align-items-center">
             <a href="{{ product.get_absolute_url }}"

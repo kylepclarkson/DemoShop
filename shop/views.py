@@ -6,7 +6,9 @@ from .models import Category, Product
 def home(request):
 
     # products to be displayed in featured section
-    featured = Product.objects.all().filter(featured=True)
+    featured = Product.objects.all().\
+        filter(featured=True).\
+        filter(available=True)
 
     context = {
         'featured': featured
