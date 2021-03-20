@@ -2,6 +2,7 @@
 
 {% extends 'base.html' %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}
 
@@ -10,7 +11,7 @@
 {% block content %}
 
     {# === hero section === #}
-    <div id="home-hero" class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+    <div id="home-hero" class="d-flex flex-column min-vh-100 justify-content-center align-items-center pt-5">
         <div class="col-lg-6 col-md-6 col-xs-8 my-lg-5 mx-auto text-center">
             <h1 class="fw-light">The Best DemoShop Around</h1>
             <p class="lead text-muted">
@@ -25,18 +26,68 @@
         </div>
     </div>
 
-    {# === About === #}
-    <div id="home-about" class="min-vh-100">
-        About
-    </div>
-
     {# === Featured items === #}
-    <div class="container min-vh-100" id="featured">
+    <div class="container min-vh-100 pt-5" id="featured">
+        <div class="mx-auto text-center my-3">
+            <h1 class="fw-light">Featured Items</h1>
+            <p>Below are our feature items</p>
+            <hr>
+        </div>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {% for product in featured %}
                 {% include 'shop/product/product_card.html' %}
             {% endfor %}
         </div>
     </div>
+
+    {# ===== About Section ===== #}
+    <div class="container min-vh-100 py-3">
+        <div class="mx-auto text-center my-3">
+            <h1 class="fw-light">Who We Are</h1>
+            <p>More than just a company</p>
+            <hr>
+        </div>
+        <div class="row text-center">
+            <div class="col-lg-4">
+                <img src="{% static 'personal/chimp.jpg' %}" class="rounded-circle personal-img">
+                <h2>Chony Chuck </h2>
+                <p>
+                    <strong>CEO</strong>. The choice chimp, Chony has built the shop to where it is today.
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <img src="{% static 'personal/bison.jpg' %}" class="rounded-circle personal-img">
+                <h2>Beatrice Baxter </h2>
+                <p>
+                    <strong>Head Manager</strong>. Always on her toes, Beatrice keeps the shops running.
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <img src="{% static 'personal/zebra.jpg' %}" class="rounded-circle personal-img">
+                <h2>Zabu</h2>
+                <p>
+                    <strong>Mascot</strong>. Zabu is our mascot. For now at least.
+                </p>
+            </div>
+        </div>
+
+        {# ===== Fea #}
+        <hr>
+        <div class="row justify-content-center align-items-center py-3">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">Your local business.
+                    <span class="text-muted">Here when needed most.</span></h2>
+                <p class="lead">
+                    We thrive ourselves in support our local communities just how
+                    they support us. For over 20 years we contribute to walking-dogs which connects
+                    inner city dogs to children that need to be walked.
+                </p>
+            </div>
+            <div class="col-md-5">
+                <img src="{% static 'personal/dog.jpg' %}" class="" alt="">
+            </div>
+        </div>
+
+    </div><!-- /.container -->
 
 {% endblock %}
