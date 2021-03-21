@@ -4,7 +4,7 @@ from .models import Category, Product
 
 
 def home(request):
-
+    """ Display home page info. Included are featured products. """
     # products to be displayed in featured section
     featured = Product.objects.all().\
         filter(featured=True).\
@@ -34,13 +34,19 @@ def product_list(request, category_slug=None):
 
 
 def product_detail(request, id, slug):
-    """ Get a single product using its ID and slug. """
+    """ Get a single product using its ID and slug. Fetch additional
+    products with the same category as the requested product. """
     # include slug in URL to be SEO-friendly
     product = get_object_or_404(Product, id=id, slug=slug)
+    category = product.category
+    # 4 products in the same category, excluding the request.
+    related_products = Product.objects.filter(category=category).exclude(id=id)[:4]
+
     # cart_product_form = CartAddProductForm()
 
     context = {
         'product': product,
+        'related_products': related_products
         # 'cart_product_form': cart_product_form,
     }
 
