@@ -1,19 +1,9 @@
 {% if messages %}
-{#    <div class="position-fixed top-0 start-50 translate-middle-x p-4" style="z-index: 5">#}
-{#        <div id="toastMessage" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">#}
-{#            <div class="toast-header">#}
-{#                <h5>Added to cart</h5>#}
-{#            </div>#}
-{#            <div class="toast-body">#}
-{#                <p>{{ toast_message }}</p>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
     {% for message in messages %}
         <div aria-live="polite"
              aria-atomic="true"
              class="bg-dark">
-            <div class="toast-container position-absolute p-3 m-5">
+            <div class="toast-container position-absolute">
                 <div class="toast position-fixed top-0 start-50 translate-middle-x {{ message.extra_tags }}" id="toastMessage">
                     <div class="toast-body">
                         {{ message }}
@@ -22,16 +12,4 @@
             </div>
         </div>
     {% endfor %}
-
-    {#    <div id="toastMessage" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive"#}
-    {#         aria-atomic="true">#}
-    {#        <div class="d-flex">#}
-    {#            <div class="toast-body">#}
-    {#                Hello, world! This is a toast message.#}
-    {#            </div>#}
-    {#            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"#}
-    {#                    aria-label="Close"></button>#}
-    {#        </div>#}
-    {#    </div>#}
-
 {% endif %}
