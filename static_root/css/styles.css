@@ -1,3 +1,16 @@
 #home-hero {
     background-color: rgba(220,220,220, 0.4) !important;
 }
+
+.personal-img {
+    width: 200px;
+    height: 200px;
+}
+
+.divider {
+    margin: 5rem 0;
+}
+
+.footer {
+    height: 200px;
+}

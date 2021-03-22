@@ -70,12 +70,13 @@
             <div class="row">
                 {% for related_product in related_products %}
                     <div class="col-md-3 col-sm-6 mb-4">
-                    {% thumbnail related_product.image "500x300" crop='center' as im %}
-                        <a href="{% url 'shop:product_detail' related_product.id related_product.slug %}">
-                            <img class="img-fluid rounded" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                        </a>
-                    {% endthumbnail %}
-                </div>
+                        {% thumbnail related_product.image "500x300" crop='center' as im %}
+                            <a href="{% url 'shop:product_detail' related_product.id related_product.slug %}">
+                                <img class="img-fluid rounded" src="{{ im.url }}" width="{{ im.width }}"
+                                     height="{{ im.height }}">
+                            </a>
+                        {% endthumbnail %}
+                    </div>
                 {% endfor %}
             </div>
         {% endif %}
@@ -107,6 +108,5 @@
         {##}
         {#        </div>#}
         <!-- /.row -->
-
     </div>
 {% endblock %}

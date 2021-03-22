@@ -34,8 +34,8 @@ def cart_add(request, product_id):
 
     if product.quantity > 0:
         # place item in cart.
-        product.quantity -= 1
-        product.save()
+        # product.quantity -= 1
+        # product.save()
         cart.add(product=product, quantity=1, override_quantity=True)
 
         toast_message = f"{product.name} added to cart."
@@ -46,12 +46,17 @@ def cart_add(request, product_id):
         toast_message = f"{product.name} is no longer available!"
         toast_bg = "bg-danger"
 
-    context = {
-        toast_message: toast_message,
-        toast_bg: toast_bg
-    }
+    # 4 products in the same category, excluding the request.
+    related_products = Product.objects.filter(category=product.category).exclude(id=product_id)[:4]
 
-    
+    context = {
+        'product': product,
+        'related_products': related_products,
+        'toast_message': toast_message,
+        'toast_bg': toast_bg
+    }
+    return render(request, 'shop/product/detail.html', context=context)
+
 # @require_POST
 # def cart_add(request, product_id):
 #     """ Add product to cart. """
