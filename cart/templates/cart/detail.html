@@ -9,15 +9,16 @@
 {% endblock %}
 {% block content %}
     <div class="container-fluid min-vh-100 px-5">
-        <h1>Cart details</h1>
         {% if cart|length == 0 %}
-            <h3>Your cart is empty</h3>
-
+            <div class="container text-center my-5">
+                <h3>Your cart is empty!</h3>
+                <p>View our <a href="{% url 'shop:product_list' %}">products</a> here.</p>
+            </div>
         {% else %}
             <table class="table align-middle">
                 <thead>
                 <tr>
-                    <th scope="col"></th>
+                    <th scope="col-4">{# image col #}</th>
                     <th scope="col">Item</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Total Price</th>
@@ -29,10 +30,12 @@
                 {% for item in cart %}
                     {% with product=item.product %}
                         <tr>
-                            <td>
-                                {% thumbnail product.image "200x180" crop='center' as im %}
-                                    <img class="img-fluid rounded" src="{{ im.url }}" width="{{ im.width }}"
-                                         height="{{ im.height }}">
+                            <td class="text-center">
+                                {% thumbnail product.image "220x200" crop='center' as im %}
+                                    <a href="{% url 'shop:product_detail' product.id product.slug %}">
+                                        <img class="img-fluid rounded" src="{{ im.url }}" width="{{ im.width }}"
+                                             height="{{ im.height }}">
+                                    </a>
                                 {% endthumbnail %}
                             </td>
                             <td>{{ product.name }}</td>
@@ -41,8 +44,8 @@
                                     {% csrf_token %}
                                     {{ item.update_quantity_form.quantity }}
                                     {{ item.update_quantity_form.override }}
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-lg bi-plus-circle"></i>
+                                    <button type="submit" class="btn btn-primary my-1">
+                                        <i class="bi bi-plus-circle"></i>
                                     </button>
                                 </form>
                             </td>
@@ -51,40 +54,76 @@
                                 <form action="{% url 'cart:cart_remove' product.id %}" method="POST">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger">
-                                        <i class="bi bi-lg bi-x-circle"></i>
+                                        <i class="bi bi-x-circle"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     {% endwith %}
                 {% endfor %} {# ===== end cart loop ===== #}
-                {# === apply coupon === #}
+
+                <tr>
+                    <td></td>
+                    <td>Total</td>
+                    <td></td>
+                    <td>${{ cart.get_total_price|floatformat:2 }}</td>
+                    <td></td>
+                </tr>
+                {# show discount #}
                 {% if cart.coupon %}
-                    <tr class="subtotal">
-                        <td>Subtotal</td>
-                        <td colspan="4"></td>
-                        <td class="num">${{ cart.get_total_price|floatformat:2 }}</td>
+                    <tr>
+                        <td>{{ cart.coupon.code }} ({{ cart.coupon.discount }}) %off</td>
+                        <td></td>
+                        <td></td>
+                        <td>- ${{ cart.get_discount|floatformat:2 }}</td>
+                        <td></td>
                     </tr>
                     <tr>
-                        <td>
-                            "{{ cart.coupon.code }}" coupon
-                            ({{ cart.coupon.discount }}% off)
-                        </td>
-                        <td colspan="4"></td>
-                        <td class="num neg">- ${{ cart.get_discount|floatformat:2 }}
-                        </td>
+                        <td></td>
+                        <td>With discount</td>
+                        <td></td>
+                        <td>$ {{ cart.get_total_price_after_discount|floatformat:2 }}</td>
+                        <td></td>
                     </tr>
                 {% endif %}
-
-                <tr class="total">
-                    <td>Total</td>
-                    <td colspan="4"></td>
-                    <td class="num">${{ cart.get_total_price_after_discount|floatformat:2 }}</td>
-                </tr>
+                {# === apply coupon === #}
+                {#                {% if cart.coupon %}#}
+                {#                    <tr class="subtotal">#}
+                {#                        <td>Subtotal</td>#}
+                {#                        <td colspan="4"></td>#}
+                {#                        <td class="num">${{ cart.get_total_price|floatformat:2 }}</td>#}
+                {#                    </tr>#}
+                {#                    <tr>#}
+                {#                        <td>#}
+                {#                            "{{ cart.coupon.code }}" coupon#}
+                {#                            ({{ cart.coupon.discount }}% off)#}
+                {#                        </td>#}
+                {#                        <td colspan="4"></td>#}
+                {#                        <td class="num neg">- ${{ cart.get_discount|floatformat:2 }}#}
+                {#                        </td>#}
+                {#                    </tr>#}
+                {#                {% endif %}#}
+                {##}
+                {#                <tr class="total">#}
+                {#                    <td>Total</td>#}
+                {#                    <td colspan="4"></td>#}
+                {#                    <td class="num">${{ cart.get_total_price_after_discount|floatformat:2 }}</td>#}
+                {#                </tr>#}
                 </tbody>
             </table>
+
+            <div class="row justify-content-start">
+                <p>Have a coupon? Enter it below!</p>
+                <form action="{% url "coupons:apply" %}" method="post">
+                    {% csrf_token %}
+                    {{ coupon_apply_form }}
+                    <input type="submit" value="Apply">
+                </form>
+            </div>
+            <div class="row justify-content-end">
+                <a href="{% url 'shop:product_list' %}" class="btn btn-secondary my-2">Continue Shopping</a>
+                <a href="#" class="btn btn-primary">Checkout</a>
+            </div>
         {% endif %}
-
     </div>
-
 {% endblock %}
