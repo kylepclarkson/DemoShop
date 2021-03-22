@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 
 from shop.models import Product
 from .cart import Cart
@@ -36,15 +37,18 @@ def cart_add(request, product_id):
         # place item in cart.
         # product.quantity -= 1
         # product.save()
-        cart.add(product=product, quantity=1, override_quantity=True)
-
-        toast_message = f"{product.name} added to cart."
-        toast_bg = "bg-success"
+        cart.add(product=product, quantity=1, override_quantity=False)
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             f'{product.name} was added to your cart!',
+                             extra_tags='bg-primary text-white')
 
     else:
         # item is no longer available
-        toast_message = f"{product.name} is no longer available!"
-        toast_bg = "bg-danger"
+        messages.add_message(request,
+                             messages.ERROR,
+                             f'{product.name} was not added to your cart!',
+                             extra_tags='bg-danger text-white')
 
     # 4 products in the same category, excluding the request.
     related_products = Product.objects.filter(category=product.category).exclude(id=product_id)[:4]
@@ -52,8 +56,6 @@ def cart_add(request, product_id):
     context = {
         'product': product,
         'related_products': related_products,
-        'toast_message': toast_message,
-        'toast_bg': toast_bg
     }
     return render(request, 'shop/product/detail.html', context=context)
 

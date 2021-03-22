@@ -24,25 +24,25 @@
                     </div>
                     <div class="col">
                         <div class="text-end">
-                            {% if product.quantity > 0 %}
-                                <h4><strong>${{ product.price }}</strong></h4>
-                            {% else %}
-                                <h4 class="text-danger"><strong>SOLD OUT</strong></h4>
-                            {% endif %}
+                            <h4><strong>${{ product.price }}</strong></h4>
                         </div>
                     </div>
                 </div>
                 <div class="row my-3">
                     <div class="col">
-                        <h4>
+                        <p>
                             <a href="{{ product.category.get_absolute_url }}">
                                 {{ product.category }}
                             </a>
-                        </h4>
+                        </p>
                     </div>
                     <div class="col">
                         <div class="text-end">
-                            TODO low stock
+                            {% if product.quantity > 10 %}
+                                <p>10+ item{{ product.quantity|pluralize }} in stock.</p>
+                            {% else %}
+                                <p>{{ product.quantity }} item{{ product.quantity|pluralize }} in stock.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -52,11 +52,16 @@
             </div>
 
             <div class="col align-self-end text-end">
-                <form action="{% url "cart:cart_add" product.id %}" method="POST">
-                    {% csrf_token %}
-                    {{ cart_product_form }}
-                    <input class="btn btn-primary" type="submit" value="Add to cart">
-                </form>
+                {% if product.quantity > 0 %}
+                    <form action="{% url "cart:cart_add" product.id %}" method="POST">
+                        {% csrf_token %}
+                        {{ cart_product_form }}
+                        <input class="btn btn-md btn-outline-secondary" type="submit"
+                               value="Add to cart">
+                    </form>
+                {% else %}
+                    <p class="text-danger"><strong>SOLD OUT</strong></p>
+                {% endif %}
             </div>
             {# === end product details === #}
         </div>
