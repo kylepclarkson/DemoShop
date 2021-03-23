@@ -11,7 +11,10 @@ class Coupon(models.Model):
     discount = models.IntegerField(validators=[
         MinValueValidator(0), MaxValueValidator(100)
     ])
+    # coupon has been used.
     active = models.BooleanField()
+    # true if coupon can only be used once.
+    single_use = models.BooleanField(default=True)
 
     def __str__(self):
         return self.code
