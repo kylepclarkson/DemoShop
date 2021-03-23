@@ -11,11 +11,11 @@ gateway = braintree.BraintreeGateway(settings.BRAINTREE_CONF)
 
 
 def payment_done(request):
-    return render(request, 'payment/done.html')
+    return render(request, 'payment/success.html')
 
 
 def payment_cancel(request):
-    return render(request, 'payment/canceled.html')
+    return render(request, 'payment/error.html')
 
 
 def payment_process(request):
