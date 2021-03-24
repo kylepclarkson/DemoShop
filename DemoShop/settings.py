@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 from . import private_keys as pirkeys
+import braintree
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -139,3 +140,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 
 # ===== Cart session =====
 CART_SESSION_ID = 'cart'
+
+# ===== Braintree configuration =====
+BRAINTREE_MERCHANT_ID = pirkeys.BRAINTREE_MERCHANT_ID
+BRAINTREE_PUBLIC_KEY = pirkeys.BRAINTREE_PUBLIC_KEY
+BRAINTREE_PRIVATE_KEY = pirkeys.BRAINTREE_PRIVATE_KEY
+
+BRAINTREE_CONF = braintree.Configuration(
+    braintree.Environment.Sandbox,
+    merchant_id=BRAINTREE_MERCHANT_ID,
+    public_key=BRAINTREE_PUBLIC_KEY,
+    private_key=BRAINTREE_PRIVATE_KEY,
+)

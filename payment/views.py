@@ -4,7 +4,7 @@ from django.conf import settings
 import braintree
 
 from orders.models import Order
-# from .tasks import payment_completed
+from .tasks import payment_completed
 
 # braintree gateway
 gateway = braintree.BraintreeGateway(settings.BRAINTREE_CONF)
