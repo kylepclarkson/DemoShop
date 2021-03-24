@@ -6,21 +6,28 @@
 
 
 {% block content %}
-    <h1>Pay by Credit Card</h1>
-    <form id="payment" method="POST">
-        {% csrf_token %}
-        <label for="card-number">Card Number</label>
-        <div id="card-number" class="field"></div>
+    <div class="container min-vh-100">
+        <div class="row my-3">
+            <h1>Pay by Credit Card</h1>
+            <p class="text-muted ms-2">Use the form below to pay.</p>
+        </div>
+        <form id="payment" method="POST" class="form needs-validation">
+            {% csrf_token %}
+            <label for="card-number" class="form-label">Card Number</label>
+            <div id="card-number" class="field"></div>
 
-        <label for="cvv">CVV</label>
-        <div id="cvv" class="field"></div>
+            <label for="cvv">CVV</label>
+            <div id="cvv" class="field"></div>
 
-        <label for="expiration-date">Expiration Date</label>
-        <div id="expiration-date" class="field"></div>
+            <label for="expiration-date">Expiration Date</label>
+            <div id="expiration-date" class="field"></div>
 
-        <input type="hidden" id="nonce" name="payment_method_nonce" value="">
-        <input type="submit" value="Pay">
-    </form>
+            <input type="hidden" id="nonce" name="payment_method_nonce" value="">
+            <div class="row">
+                <input type="submit" class="btn btn-lg btn-primary mt-3" value="Pay">
+            </div>
+        </form>
+    </div>
 
     {# braintree JS client #}
     <script src="https://js.braintreegateway.com/web/3.58.0/js/client.min.js"></script>
@@ -40,14 +47,26 @@
             braintree.hostedFields.create({
                 client: clientInstance,
                 styles: {
-                    'input': {'font-size': '13px'},
+                    'input': {
+                        'font-size': '1.5rem',
+                        'color': '#495057',
+                    },
                     'input.invalid': {'color': 'red'},
                     'input.valid': {'color': 'green'}
                 },
                 fields: {
-                    number: {selector: '#card-number'},
-                    cvv: {selector: '#cvv'},
-                    expirationDate: {selector: '#expiration-date'}
+                    number: {
+                        selector: '#card-number',
+                        placeholder: '4111 1111 1111 1111'
+                    },
+                    cvv: {
+                        selector: '#cvv',
+                        placeholder: '123'
+                    },
+                    expirationDate: {
+                        selector: '#expiration-date',
+                        placeholder: 'MM / YY'
+                    }
                 }
             }, function (hostedFieldsErr, hostedFieldsInstance) {
                 if (hostedFieldsErr) {
