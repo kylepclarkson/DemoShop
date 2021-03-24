@@ -10,25 +10,47 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-2">
-                <h3 class="">Categories</h3>
-                <div class="list-group">
-                    <a href="{% url 'shop:product_list' %}" class="list-group-item list-group-item-action">All</a>
-                    {% for category in categories %}
-                        <a href="{% url 'shop:product_list_by_category' category.slug %}" class="list-group-item list-group-item-action">{{ category}}</a>
-                    {% endfor %}
-                </div>
-            </div>
+    <div class="container">
+        <div class="d-flex justify-content-between align-self-start my-3 px-2">
+            <h3>
+                {% if category %}
+                    {{ category }}
+                {% else %}
+                    All Products
+                {% endif %}
+            </h3>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle"
+                        type="button"
+                        id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    Filter Category
+                </button>
 
-            <div class="col-9">
-                <div class="container min-vh-100 pt-5" id="featured">
-                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
-                        {% for product in products %}
-                            {% include 'shop/product/product_card.html' %}
-                        {% endfor %}
-                    </div>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{% url 'shop:product_list' %}" class="dropdown-item">
+                            All Products
+                        </a>
+                    </li>
+                    {% for category in categories %}
+                        <li>
+                            <a href="{% url 'shop:product_list_by_category' category.slug %}" class="dropdown-item">
+                                {{ category }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="container min-vh-100" id="featured">
+                <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3 px-2">
+                    {% for product in products %}
+                        {% include 'shop/product/product_card.html' %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
