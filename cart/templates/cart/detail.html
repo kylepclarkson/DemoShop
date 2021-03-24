@@ -43,11 +43,11 @@
                                 <form action="{% url 'cart:cart_update' product.id %}" method="POST" class="form">
                                     {% csrf_token %}
                                     {# todo add boostrap styling #}
-{#                                    <select class="form-select form-select-md" id="quantity">#}
-{#                                        {% for val in item.update_quantity_form.quantity %}#}
-{#                                            <option value="{{ val }}"></option>#}
-{#                                        {% endfor %}#}
-{#                                    </select>#}
+                                    {#                                    <select class="form-select form-select-md" id="quantity">#}
+                                    {#                                        {% for val in item.update_quantity_form.quantity %}#}
+                                    {#                                            <option value="{{ val }}"></option>#}
+                                    {#                                        {% endfor %}#}
+                                    {#                                    </select>#}
                                     {{ item.update_quantity_form.quantity }}
                                     {{ item.update_quantity_form.override }}
                                     <button type="submit" class="btn btn-primary my-1 d-flex align-self-center">
@@ -96,18 +96,21 @@
                 </tbody>
             </table>
 
-            <div class="d-flex justify-content-between mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-5">
                 <div class="align-items-start">
-                    <p>Have a coupon? Enter it below!</p>
-                    <form action="{% url "coupons:apply" %}" method="post">
-                        {% csrf_token %}
-                        {{ coupon_apply_form }}
-                        <input type="submit" class="btn btn-primary" value="Apply">
-                    </form>
+                    <div>
+                        <p>Have a coupon?</p>
+                        <form action="{% url "coupons:apply" %}" method="post">
+                            {% csrf_token %}
+                            <label for="code">Code:</label>
+                            <input id="code" name="code" class="form-control" type="text">
+                            <input type="submit" class="btn btn-primary mt-2" value="Apply">
+                        </form>
+                    </div>
                 </div>
                 {% if cart.coupon %}
                     <div class="align-items-end">
-                        <a href="{% url 'coupons:remove' %}" class="btn btn-primary">Clear Coupon</a>
+                        <a href="{% url 'coupons:remove' %}" class="btn btn-primary ">Clear Coupon</a>
                     </div>
                 {% endif %}
             </div>

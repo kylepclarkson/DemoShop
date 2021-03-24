@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 
 from .models import Coupon
 from .forms import CouponApplyForm
@@ -22,10 +23,22 @@ def coupon_apply(request):
                 active=True
             )
             request.session['coupon_id'] = coupon.id
+            messages.add_message(request,
+                                 messages.ERROR,
+                                 f'Coupon "{code}" applied to cart.',
+                                 extra_tags='bg-primary text-white')
         except Coupon.DoesNotExist:
             request.session['coupon_id'] = None
+            # Coupon does not exist or is invalid.
+            messages.add_message(request,
+                                 messages.ERROR,
+                                 f'Coupon "{code}" is either invalid or does not exist!',
+                                 extra_tags='bg-danger text-white')
 
         return redirect('cart:cart_detail')
+
+    else:
+        print(form.errors)
 
 
 def coupon_remove(request):
