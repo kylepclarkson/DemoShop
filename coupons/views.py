@@ -27,3 +27,9 @@ def coupon_apply(request):
 
         return redirect('cart:cart_detail')
 
+
+def coupon_remove(request):
+    """ Removes applied coupon's effects. """
+    request.session['coupon_id'] = None
+
+    return redirect('cart:cart_detail')

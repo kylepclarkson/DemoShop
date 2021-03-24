@@ -40,12 +40,19 @@
                             </td>
                             <td>{{ product.name }}</td>
                             <td>
-                                <form action="{% url 'cart:cart_update' product.id %}" method="POST">
+                                <form action="{% url 'cart:cart_update' product.id %}" method="POST" class="form">
                                     {% csrf_token %}
+                                    {# todo add boostrap styling #}
+{#                                    <select class="form-select form-select-md" id="quantity">#}
+{#                                        {% for val in item.update_quantity_form.quantity %}#}
+{#                                            <option value="{{ val }}"></option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
                                     {{ item.update_quantity_form.quantity }}
                                     {{ item.update_quantity_form.override }}
-                                    <button type="submit" class="btn btn-primary my-1">
-                                        <i class="bi bi-plus-circle"></i>
+                                    <button type="submit" class="btn btn-primary my-1 d-flex align-self-center">
+                                        {#                                        <i class="bi bi-plus-circle"></i>#}
+                                        Update
                                     </button>
                                 </form>
                             </td>
@@ -73,7 +80,7 @@
                 {% if cart.coupon %}
                     <tr>
                         <td></td>
-                        <td>Coupon "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off) </td>
+                        <td>Coupon "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off)</td>
                         <td></td>
                         <td class="text-danger text-right">-${{ cart.get_discount|floatformat:2 }}</td>
                         <td></td>
@@ -89,18 +96,24 @@
                 </tbody>
             </table>
 
-            <div class="row justify-content-start">
-                <p>Have a coupon? Enter it below!</p>
-                <form action="{% url "coupons:apply" %}" method="post">
-                    {% csrf_token %}
-                    {{ coupon_apply_form }}
-                    <input type="submit" value="Apply">
-                </form>
-            {# todo add remove discount coupon button. #}
+            <div class="d-flex justify-content-between mb-5">
+                <div class="align-items-start">
+                    <p>Have a coupon? Enter it below!</p>
+                    <form action="{% url "coupons:apply" %}" method="post">
+                        {% csrf_token %}
+                        {{ coupon_apply_form }}
+                        <input type="submit" class="btn btn-primary" value="Apply">
+                    </form>
+                </div>
+                {% if cart.coupon %}
+                    <div class="align-items-end">
+                        <a href="{% url 'coupons:remove' %}" class="btn btn-primary">Clear Coupon</a>
+                    </div>
+                {% endif %}
             </div>
             <div class="row justify-content-end">
-                <a href="{% url 'shop:product_list' %}" class="btn btn-secondary my-2">Continue Shopping</a>
-                <a href="{% url 'orders:order_create' %}" class="btn btn-primary">Checkout</a>
+                <a href="{% url 'shop:product_list' %}" class="btn btn-secondary mb-4">Continue Shopping</a>
+                <a href="{% url 'orders:order_create' %}" class="btn btn-primary mb-4">Checkout</a>
             </div>
         {% endif %}
     </div>
