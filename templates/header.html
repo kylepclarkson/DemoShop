@@ -1,7 +1,7 @@
 {% load  static %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'shop:home' %}">The DemoShop</a>
+        <a class="navbar-brand text-white" href="{% url 'shop:home' %}">The DemoShop</a>
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#navbarNav"
@@ -13,7 +13,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a href="{% url 'shop:product_list' %}" class="nav-link mx-1">Products</a>
+                    <a href="{% url 'shop:product_list' %}" class="nav-link mx-1 text-white">Products</a>
                 </li>
                 <li class="nav-item">
                     <span>
@@ -22,16 +22,19 @@
                                 <a class="nav-link active"
                                    aria-current="page"
                                    href="{% url 'cart:cart_detail' %}">
-                                  <i class="bi bi-basket mx-1"></i>
+                                  <i class="bi bi-basket mx-1 text-white"></i>
+                                    <span class="text-white">
                                     {{ total_items }} item{{ total_items|pluralize }}
-                                    ${{ cart.get_total_price }}
+                                    ${{ cart.get_total_price }}</span>
                                 </a>
                             {% else %}
                                 <a class="nav-link"
                                    aria-current="page"
                                    href="{% url 'cart:cart_detail' %}">
-                                  <i class="bi bi-basket mx-1"></i>
+                                  <i class="bi bi-basket mx-1 text-white"></i>
+                                    <span class="text-white">
                                     Your cart is empty
+                                    </span>
                                 </a>
                             {% endif %}
                         {% endwith %}

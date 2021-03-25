@@ -26,14 +26,14 @@ def coupon_apply(request):
             messages.add_message(request,
                                  messages.ERROR,
                                  f'Coupon "{code}" applied to cart.',
-                                 extra_tags='bg-primary text-white')
+                                 extra_tags='bg-primary bg-gradient text-white')
         except Coupon.DoesNotExist:
             request.session['coupon_id'] = None
             # Coupon does not exist or is invalid.
             messages.add_message(request,
                                  messages.ERROR,
                                  f'Coupon "{code}" is either invalid or does not exist!',
-                                 extra_tags='bg-danger text-white')
+                                 extra_tags='bg-danger bg-gradient text-white')
 
         return redirect('cart:cart_detail')
 
