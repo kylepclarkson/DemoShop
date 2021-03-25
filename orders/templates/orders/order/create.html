@@ -31,24 +31,25 @@
                 <tr>
                     <td>Total</td>
                     <td></td>
-                    <td>${{ cart.get_total_price }}</td>
+                    <td><strong>${{ cart.get_total_price }}</strong></td>
                 </tr>
                 {% if cart.coupon %}
                     <tr>
                         <td>Discount</td>
                         <td>"{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off)</td>
-                        <td class="text-danger">-${{ cart.get_discount|floatformat:2 }}</td>
+                        <td class="text-danger"><strong>-${{ cart.get_discount|floatformat:2 }}</strong></td>
                     </tr>
                     <tr>
                         <td>Total after discount</td>
                         <td></td>
-                        <td class="neg">${{ cart.get_total_price_after_discount|floatformat:2 }}</td>
+                        <td class="neg"><strong>${{ cart.get_total_price_after_discount|floatformat:2 }}</strong></td>
                     </tr>
                 {% endif %}
                 </tfoot>
             </table>
         </div>
-        <div class="container">
+        <div class="container my-5">
+            <h3 class="text-center">Mailing Details</h3>
             <form action="" class="needs-validation" method="POST">
                 {% csrf_token %}
                 {{ form }}

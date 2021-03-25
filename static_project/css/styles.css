@@ -1,3 +1,7 @@
+* {
+    font-family: 'Chivo', sans-serif;
+}
+
 #home-hero {
     background-color: rgba(201, 200, 200, 0.4) !important;
     /*background-size: cover;*/
@@ -21,23 +25,8 @@
     height: 200px;
 }
 
-/*Todo fix navbar expand background color. */
-.navbar {
-    height: 80px;
-    background-image: linear-gradient(15deg, #0575E6 0%, #021B79 100%);
-}
-.navbar-expand-lg {
-    background-image: linear-gradient(15deg, #0575E6 0%, #021B79 100%);
-}
-
-
-.navbar-nav > li {
-    border-right: 2px solid #ffffff;
-    margin-top: 2px;
-}
-
-.navbar-nav > li:last-child {
-    border: none;
+.my-nav {
+    background-image: linear-gradient(15deg, #0575E6 0%, #0764c0 100%);
 }
 
 form div.field {

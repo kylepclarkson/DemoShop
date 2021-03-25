@@ -1,5 +1,11 @@
 #home-hero {
-    /*background-color: rgba(220, 220, 220, 0.4) !important;*/
+    background-color: rgba(201, 200, 200, 0.4) !important;
+    /*background-size: cover;*/
+    /*background: url('static/personal/store_background.jpg') 50% 0 no-repeat fixed;*/
+    /*color: white;*/
+    /*height: 650px;*/
+    /*padding: 100px 0 0 0;*/
+    /*!*height: 100vh;*!*/
 }
 
 .personal-img {
@@ -15,28 +21,17 @@
     height: 200px;
 }
 
-.navbar .navbar-collapse {
-    height: 80px;
-    background-image: linear-gradient(15deg, #0575E6 0%, #021B79 100%);
-}
-
-.navbar-nav > li {
-    /*border-right: 1px solid #a49c9c;*/
-    /*margin-top: 2px;*/
-}
-
-.navbar-nav > li:last-child {
-    border: none;
+.my-nav {
+    background-image: linear-gradient(15deg, #0575E6 0%, #0764c0 100%);
 }
 
 form div.field {
-    font-size:13px;
-    color:#666;
+    font-size: 13px;
+    color: #666;
     width: 100%;
     height: 45px;
-    border:0;
+    border: 0;
     padding: 0 10px;
-    background:#efefef;
-    color:#666;
-    border-radius:4px;
+    background: #efefef;
+    border-radius: 4px;
 }
