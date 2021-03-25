@@ -5,6 +5,7 @@ import braintree
 
 from orders.models import Order
 from .tasks import payment_completed
+from cart.cart import Cart
 
 # braintree gateway
 gateway = braintree.BraintreeGateway(settings.BRAINTREE_CONF)
@@ -19,13 +20,18 @@ def payment_cancel(request):
 
 
 def payment_process(request):
-    """ Get order from session. If request method is POST, attempt to create a
-     payment. If successful update order instance."""
+    """
+    Get order from session and attempt to get payment for it.
+    If successful, send confirmation email to customer, clear contents of cart,
+    and deactivate coupon if needed.
+    """
+
+    cart = Cart(request)
 
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
+
     total_cost = order.get_total_cost()
-    print(f'total cost: {total_cost}')
 
     if request.method == 'POST':
         nonce = request.POST.get('payment_method_nonce', None)
@@ -43,7 +49,16 @@ def payment_process(request):
             order.paid = True
             order.braintree_id = result.transaction.id
             order.save()
-            # todo implement cart clear, coupon logic here. 
+
+            # deactivate coupon
+            coupon = cart.coupon
+            if coupon.single_use:
+                coupon.active = False
+                coupon.save()
+
+            # clear cart
+            cart.clear()
+
             # send confirm email async.
             # payment_completed.delay(order.id)
             return redirect('payment:done')

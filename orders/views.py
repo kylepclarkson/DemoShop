@@ -9,12 +9,20 @@ from django.template.loader import render_to_string
 from .models import OrderItem, Order
 from .forms import OrderCreateForm
 from cart.cart import Cart
-# from .tasks import order_created todo
+from .tasks import order_created
 
 
 def order_create(request):
-    """ Create a new order using cart contents. """
+    """
+    Create a new order using cart contents and apply discount if present.
+    Then redirect user to payment form to complete order.
+    """
     cart = Cart(request)
+
+    # empty cart, redirect user products page.
+    if len(cart) == 0:
+        return redirect('shop:product_list')
+
     if request.method == "POST":
         form = OrderCreateForm(request.POST)
 
@@ -36,14 +44,16 @@ def order_create(request):
                 )
             # todo move remaining code to occur only after payment is successful.
             # clear cart
-            cart.clear()
+            # cart.clear()
             # send email asynchronously
-            # order_created.delay(order.id) #todo
+            # order_created.delay(order.id)
             # set order in session
+
             request.session['order_id'] = order.id
             # redirect for payment
+            # todo: by not clearing cart, its contents (Decimal values) need to be json serializable to use
+            # todo this redirect.
             return redirect(reverse('payment:process'))
-            # return render(request, 'orders/order/created.html', {'order': order} )
 
     else:
         form = OrderCreateForm()

@@ -74,6 +74,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
+                # === added context processors ===
                 'cart.context_processors.cart'
             ],
         },
@@ -152,3 +153,7 @@ BRAINTREE_CONF = braintree.Configuration(
     public_key=BRAINTREE_PUBLIC_KEY,
     private_key=BRAINTREE_PRIVATE_KEY,
 )
+
+# === email backend ===
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

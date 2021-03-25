@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row my-3">
             {# === product image === #}
-            <div class="col-md-8">
+            <div class="col-md-8 mb-2">
                 {% thumbnail product.image "750x500" crop='center' as im %}
                     <img class="img-fluid rounded" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                 {% endthumbnail %}
@@ -69,8 +69,8 @@
         {# === Related products === #}
         {% if related_products|length > 0 %}
             <div class="row my-4">
-                <h3>Related Items</h3>
-                <p>Checkout these other {{ product.category }} items.</p>
+                <h3 class="text-center">Related Items</h3>
+                <p class="fs-5">View these other {{ product.category|lower }} items.</p>
             </div>
             <div class="row">
                 {% for related_product in related_products %}
