@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
+from django.core import serializers
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -48,11 +49,13 @@ def order_create(request):
             # send email asynchronously
             # order_created.delay(order.id)
             # set order in session
-
-            request.session['order_id'] = order.id
+            del request.session['order_id']
+            request.session['order_id'] = str(order.id)
+            # request.session['order_id'] = serializers.serialize('json', Order.objects.get(id=order.id))
             # redirect for payment
             # todo: by not clearing cart, its contents (Decimal values) need to be json serializable to use
-            # todo this redirect.
+            # todo this redirect. Read up on Django Sessions.
+            print("here")
             return redirect(reverse('payment:process'))
 
     else:
