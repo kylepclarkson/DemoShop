@@ -58,7 +58,7 @@ def payment_process(request):
             # cart.clear()
 
             # send confirm email async.
-            # payment_completed.delay(order.id)
+            payment_completed.delay(order.id)
             return redirect('payment:done')
         else:
             print(result.message)
