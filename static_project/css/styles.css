@@ -1,15 +1,13 @@
+/*Read here.*/
+
 * {
     font-family: 'Chivo', sans-serif;
 }
 
 #home-hero {
-    background-color: rgba(201, 200, 200, 0.4) !important;
-    /*background-size: cover;*/
-    /*background: url('static/personal/store_background.jpg') 50% 0 no-repeat fixed;*/
-    /*color: white;*/
-    /*height: 650px;*/
-    /*padding: 100px 0 0 0;*/
-    /*!*height: 100vh;*!*/
+    background: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url("../personal/store_bg1.jpg") 50% 0 no-repeat fixed;
+    height: 650px;
+    padding: 100px 0 0 0;
 }
 
 .personal-img {

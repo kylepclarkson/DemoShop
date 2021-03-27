@@ -14,10 +14,10 @@ def payment_completed(order_id):
     order = Order.objects.get(id=order_id)
 
     subject = f'Dem0Shop - Order no. {order.id} confirmed'
-    message = f'Dear {order.first_name}, \n\n ' \
-              f'This email confirms your order with ID {order.id} has been' \
-              f'received and paid. Expect a follow-up email in a few days' \
+    message = f'Dear {order.first_name}, \n\n' \
+              f'This email confirms your order with ID {order.id} has been ' \
+              f'received and paid for. Expect a follow-up email in a few days ' \
               f'to notify you when your order is sent to the address provided. \n\n' \
-              f'Thank you for your business!'
+              f'Thank you for your business!\n'
     email = EmailMessage(subject, message, 'admin@myshop.com', [order.email])
     email.send()
