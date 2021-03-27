@@ -27,7 +27,7 @@
         <div class="d-flex justify-content-between">
             <a href="{{ product.get_absolute_url }}"
                class="btn btn-md btn-outline-secondary">View</a>
-            {% if product.quantity > 0 %}
+            {% if product.available %}
                 <form action="{% url "cart:cart_add" product.id %}" method="POST">
                     {% csrf_token %}
                     {{ cart_product_form }}

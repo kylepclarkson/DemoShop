@@ -33,7 +33,7 @@ def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
 
-    if product.quantity > 0:
+    if product.available > 0:
         # place item in cart.
         # product.quantity -= 1
         # product.save()

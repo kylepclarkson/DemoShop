@@ -1,10 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
-from django.core import serializers
-from django.conf import settings
-from django.http import HttpResponse
-from django.template.loader import render_to_string
 # import weasyprint
 
 from .models import OrderItem, Order
@@ -43,18 +39,13 @@ def order_create(request):
                     price=item['price'],
                     quantity=item['quantity'],
                 )
-            # todo move remaining code to occur only after payment is successful.
             # clear cart
-            # cart.clear()
+            cart.clear()
             # send email asynchronously
             # order_created.delay(order.id)
             # set order in session
-            del request.session['order_id']
-            request.session['order_id'] = str(order.id)
-            # request.session['order_id'] = serializers.serialize('json', Order.objects.get(id=order.id))
             # redirect for payment
-            # todo: by not clearing cart, its contents (Decimal values) need to be json serializable to use
-            # todo this redirect. Read up on Django Sessions.
+            request.session['order_id'] = order.id
             print("here")
             return redirect(reverse('payment:process'))
 

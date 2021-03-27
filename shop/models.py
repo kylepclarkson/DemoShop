@@ -1,8 +1,6 @@
 from django.db import models
 from django.urls import reverse
 
-import PIL.Image as pillow
-
 
 class Category(models.Model):
     """ A category of a shop product. """
@@ -34,7 +32,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     # use DecimalField instead of float to avoid rounding issues.
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=0)
+    # quantity = models.PositiveIntegerField(default=0)
     # false if product cannot be bought.
     available = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)

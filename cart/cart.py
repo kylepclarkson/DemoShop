@@ -24,6 +24,7 @@ class Cart(object):
         self.cart = cart
         # store coupon from session object.
         self.coupon_id = self.session.get('coupon_id')
+        self.order_id = None
 
     def add(self, product, quantity=1, override_quantity=False):
         """ Add/update a product to the cart. """

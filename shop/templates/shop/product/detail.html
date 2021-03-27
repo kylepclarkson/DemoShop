@@ -38,11 +38,9 @@
                     </div>
                     <div class="col">
                         <div class="text-end">
-                            {% if product.quantity > 10 %}
-                                <p>10+ item{{ product.quantity|pluralize }} in stock.</p>
-                            {% else %}
-                                <p>{{ product.quantity }} item{{ product.quantity|pluralize }} in stock.</p>
-                            {% endif %}
+{#                            {% if not product.available %}#}
+{#                                <p class="text-danger">SOLD OUT</p>#}
+{#                            {% endif %}#}
                         </div>
                     </div>
                 </div>
@@ -52,7 +50,7 @@
             </div>
 
             <div class="col align-self-end text-end">
-                {% if product.quantity > 0 %}
+                {% if product.available %}
                     <form action="{% url "cart:cart_add" product.id %}" method="POST">
                         {% csrf_token %}
                         {{ cart_product_form }}

@@ -25,12 +25,8 @@ def payment_process(request):
     If successful, send confirmation email to customer, clear contents of cart,
     and deactivate coupon if needed.
     """
-    print("now here")
     cart = Cart(request)
     order_id = request.session.get('order_id')
-    for item in cart:
-        print(item)
-    print(f'order id: {order_id}')
     order = get_object_or_404(Order, id=order_id)
 
     total_cost = order.get_total_cost()
@@ -53,13 +49,13 @@ def payment_process(request):
             order.save()
 
             # deactivate coupon
-            coupon = cart.coupon
-            if coupon.single_use:
-                coupon.active = False
-                coupon.save()
-
-            # clear cart
-            cart.clear()
+            # coupon = cart.coupon
+            # if coupon.single_use:
+            #     coupon.active = False
+            #     coupon.save()
+            #
+            # # clear cart
+            # cart.clear()
 
             # send confirm email async.
             # payment_completed.delay(order.id)
