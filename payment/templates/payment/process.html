@@ -9,7 +9,7 @@
     <div class="container min-vh-100">
         <div class="row my-3">
             <h1>Pay by Credit Card</h1>
-            <p class="text-muted ms-2">Use the form below to pay.</p>
+            <p class="text-muted ms-2">Use the form below to pay by credit card.</p>
         </div>
         <form id="payment" method="POST" class="form needs-validation">
             {% csrf_token %}
@@ -65,7 +65,7 @@
                     },
                     expirationDate: {
                         selector: '#expiration-date',
-                        placeholder: 'MM / YY'
+                        placeholder: '12 / 30'
                     }
                 }
             }, function (hostedFieldsErr, hostedFieldsInstance) {
