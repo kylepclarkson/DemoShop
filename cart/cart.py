@@ -56,6 +56,15 @@ class Cart(object):
         """ Return total price of shopping cart. """
         return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
 
+    def contains_physical(self):
+        """ Returns true if an item in the cart is physical. False otherwise. """
+        products_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=products_ids)
+        for product in products:
+            if product.is_physical:
+                return True
+        return False
+
     @property
     def coupon(self):
         """ Get coupon for this cart session. """
@@ -81,7 +90,9 @@ class Cart(object):
         return sum(item['quantity'] for item in self.cart.values())
 
     def __iter__(self):
-        """ Return an iteration of all items in the cart. """
+        """ Return an iteration of all items in the cart.
+            Append to each item it price and total price as decimal field.
+        """
         products_ids = self.cart.keys()
         products = Product.objects.filter(id__in=products_ids)
         cart = self.cart.copy()

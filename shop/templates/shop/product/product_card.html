@@ -6,14 +6,14 @@
     <div class="text-center">
         <a href="{{ product.get_absolute_url }}">
             {% thumbnail product.image "360x240" crop='center' as im %}
-                <img class="img-fluid p-1 rounded" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                <img class="img-fluid rounded p-1" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
             {% endthumbnail %}
         </a>
     </div>
     {# === card body === #}
     <div class="card-body">
         <div class="d-flex justify-content-between">
-            <h3>{{ product.name }}</h3>
+            <h3>{{ product.name|truncatechars:20 }}</h3>
             <p><strong>${{ product.price }}</strong></p>
         </div>
         <div class="d-flex">

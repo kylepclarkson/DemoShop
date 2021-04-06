@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container min-vh-100 mt-5">
         <div class="row my-3">
             {# === product image === #}
             <div class="col-md-8 mb-2">
@@ -30,10 +30,11 @@
                 </div>
                 <div class="row my-3">
                     <div class="col">
+                        <p>Categories:</p>
                         <p>
-                            <a href="{{ product.category.get_absolute_url }}">
-                                {{ product.category }}
-                            </a>
+                            {% for category in product.get_categories %}
+                                <a href="{{ category.get_absolute_url }}">{{ category }}</a>
+                            {% endfor %}
                         </p>
                     </div>
                     <div class="col">

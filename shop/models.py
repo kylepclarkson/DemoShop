@@ -21,7 +21,7 @@ class Category(models.Model):
 
 class Product(models.Model):
 
-    category = models.ManyToManyField(Category, related_name='products')
+    categories = models.ManyToManyField(Category, related_name='products')
     # we query both name and slug; use db_index.
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=200, db_index=True)
@@ -33,6 +33,8 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     # false if product cannot be bought.
     available = models.BooleanField(default=True)
+    # These items will require a mailing address.
+    is_physical = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -43,6 +45,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_categories(self):
+        return [category for category in self.categories.iterator()]
 
     def get_absolute_url(self):
         return reverse('shop:product_detail', args=[self.id, self.slug])

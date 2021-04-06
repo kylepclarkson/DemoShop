@@ -51,11 +51,12 @@ def cart_add(request, product_id):
                              extra_tags='bg-danger text-white')
 
     # 4 products in the same category, excluding the request.
-    related_products = Product.objects.filter(category=product.category).exclude(id=product_id)[:4]
+    # todo
+    # related_products = Product.objects.filter(category=product.category).exclude(id=product_id)[:4]
 
     context = {
         'product': product,
-        'related_products': related_products,
+        # 'related_products': related_products,
     }
     return render(request, 'shop/product/detail.html', context=context)
 

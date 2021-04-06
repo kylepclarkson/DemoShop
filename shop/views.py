@@ -24,7 +24,8 @@ def product_list(request, category_slug=None):
     products = Product.objects.all()
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
+        # find all products that have this category included in their tags.
+        products = products.filter(categories__in=[category])
 
     context = {
         'category': category,
@@ -39,15 +40,16 @@ def product_detail(request, id, slug):
     products with the same category as the requested product. """
     # include slug in URL to be SEO-friendly
     product = get_object_or_404(Product, id=id, slug=slug)
-    category = product.category
+    categories = product.get_categories()
+    print('categories: ', categories)
     # 4 products in the same category, excluding the request.
-    related_products = Product.objects.filter(category=category).exclude(id=id)[:4]
+    # related_products = Product.objects.filter(category=category).exclude(id=id)[:4]
 
     # cart_product_form = CartAddProductForm()
 
     context = {
         'product': product,
-        'related_products': related_products
+        # 'related_products': related_products
         # 'cart_product_form': cart_product_form,
     }
 
