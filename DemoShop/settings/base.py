@@ -127,7 +127,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-
 # ===== Static files =====
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
@@ -138,6 +137,8 @@ STATICFILES_DIRS = [
 # ===== Media Files =====
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
+
+
 
 # ===== Cart session =====
 CART_SESSION_ID = 'cart'
