@@ -33,11 +33,11 @@ class OrderCreateForm(forms.ModelForm):
                 'class': 'form-control',
                 'rows': 3,
                 'placeholder': 'Mailing Address',
-                'required': True
+                # 'required': True
             }),
             'postal_code': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Postal Code (e.g. A1A 1A1)',
-                'required': True
+                # 'required': True
             }),
         }

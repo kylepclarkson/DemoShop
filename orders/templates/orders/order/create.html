@@ -27,13 +27,13 @@
                     <tr>
                         <td>{{ item.product.name }}</td>
                         <td>{{ item.quantity }} x {{ item.price }}</td>
-                        <td>$ {{ item.total_price|floatformat:2 }}</td>
+                        <td>${{ item.total_price|floatformat:2 }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td>Total</td>
+                    <td><strong>Total</strong></td>
                     <td></td>
                     <td><strong>${{ cart.get_total_price }}</strong></td>
                 </tr>
@@ -52,18 +52,38 @@
                 </tfoot>
             </table>
         </div>
-        {% if cart.contains_physical %}
-            <div class="container my-5">
-                <h3 class="text-center">Mailing Details</h3>
-                <form action="" class="needs-validation" method="POST">
-                    {% csrf_token %}
-                    {{ form }}
-                    <p class="d-flex justify-content-between my-5">
-                        <a href="{% url 'cart:cart_detail' %}" class="btn btn-secondary">Back to Cart</a>
-                        <input type="submit" class="btn btn-primary" value="Place order">
-                    </p>
-                </form>
-            </div>
-        {% endif %}
+
+        <div class="container my-5">
+            <h3 class="text-center">Mailing Details</h3>
+            <form action="" class="needs-validation" method="POST">
+                {% csrf_token %}
+                {{ create_order_form }}
+                <div class="d-flex justify-content-between my-5">
+                    <a href="{% url 'cart:cart_detail' %}" class="btn btn-secondary">Back to Cart</a>
+                    <input type="submit" class="btn btn-primary" value="To Payment">
+                </div>
+            </form>
+        </div>
+
+{#        {% if cart.contains_physical %}#}
+            {# Show form to get mailing address. #}
+{#            <div class="container my-5">#}
+{#                <h3 class="text-center">Mailing Details</h3>#}
+{#                <form action="" class="needs-validation" method="POST">#}
+{#                    {% csrf_token %}#}
+{#                    {{ form }}#}
+{#                    <div class="d-flex justify-content-between my-5">#}
+{#                        <a href="{% url 'cart:cart_detail' %}" class="btn btn-secondary">Back to Cart</a>#}
+{#                        <input type="submit" class="btn btn-primary" value="To Payment">#}
+{#                    </div>#}
+{#                </form>#}
+{#            </div>#}
+{#        {% else %}#}
+            {# display buttons. #}
+{#            <div class="d-flex justify-content-between my-5">#}
+{##}
+{#                <a href="{% url 'cart:cart_detail' %}" class="btn btn-secondary">Back to Cart</a>#}
+{#            </div>#}
+{#        {% endif %}#}
     </div>
 {% endblock %}

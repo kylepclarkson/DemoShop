@@ -30,6 +30,11 @@ def order_create(request):
     if request.method == "POST":
         form = OrderCreateForm(request.POST)
 
+        if not cart.contains_physical():
+            # disable requirements if not needed.
+            form.fields['address'].required = False
+            form.fields['postal_code'].required = False
+
         if form.is_valid():
             order = form.save(commit=False)
             # apply coupon, discount if present
@@ -46,6 +51,7 @@ def order_create(request):
                     price=item['price'],
                     quantity=item['quantity'],
                 )
+            # TODO do not clear cart, jsonify OrderItems
             # clear cart
             cart.clear()
             # send email asynchronously
@@ -58,8 +64,17 @@ def order_create(request):
 
     else:
         form = OrderCreateForm()
+        if not cart.contains_physical():
+            # hide mailing inputs in form
+            from django import forms
+            form.fields['address'].widget = forms.HiddenInput()
+            form.fields['postal_code'].widget = forms.HiddenInput()
 
-    return render(request, 'orders/order/create.html', {'cart': cart, 'form': form})
+    context = {
+        'cart': cart,
+        'create_order_form': form,
+    }
+    return render(request, 'orders/order/create.html', context=context)
 
 
 @staff_member_required

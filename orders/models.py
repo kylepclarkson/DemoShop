@@ -9,27 +9,20 @@ from coupons.models import Coupon
 
 class Order(models.Model):
     """ Record of a customer's order. """
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField()
-    address = models.CharField(max_length=250)
+    first_name = models.CharField(max_length=100, null=False)
+    last_name = models.CharField(max_length=100, null=False)
+    email = models.EmailField(null=False)
+
+    address = models.CharField(max_length=300)
     postal_code = models.CharField(max_length=12)
-    # city = models.CharField(max_length=100)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
-    braintree_id = models.CharField(max_length=150, blank=True)
-    # store coupon and discount in order in case coupon is changed/deleted after order is created.
-    coupon = models.ForeignKey(Coupon,
-                               related_name='orders',
-                               null=True,
-                               blank=True,
-                               on_delete=models.SET_NULL)
-    # discount as value between in [0,100]
-    discount = models.IntegerField(default=0,
-                                   validators=[
-                                       MinValueValidator(0), MaxValueValidator(100)
-                                   ])
+    is_digital = models.BooleanField(default=False)
+
+    coupon = models.ForeignKey(Coupon, related_name='orders', null=True, blank=True, on_delete=models.SET_NULL)
+    discount = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
     class Meta:
         ordering = ('-created',)
