@@ -53,12 +53,12 @@ def order_create(request):
                 )
             # TODO do not clear cart, jsonify OrderItems
             # clear cart
-            cart.clear()
+            # cart.clear()
             # send email asynchronously
             # order_created.delay(order.id)
             # set order in session
             # redirect for payment
-            request.session['order_id'] = order.id
+            # request.session['order_id'] = order.id
             print("here")
             return redirect(reverse('payment:process'))
 
