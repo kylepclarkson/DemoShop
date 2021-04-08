@@ -3,10 +3,8 @@ import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
+from django.contrib import messages
 
-# xhtml2pdf
-import os
-from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -20,8 +18,7 @@ from .tasks import order_created
 
 def order_create(request):
     """
-    Create a new order using cart contents and apply discount if present.
-    Then redirect user to payment form to complete order.
+    Called once payment is successful. Creates a new order instances, empties cart, and sends email confirmation email.
     """
     cart = Cart(request)
 
@@ -30,39 +27,46 @@ def order_create(request):
         return redirect('shop:product_list')
 
     if request.method == "POST":
-        form = OrderCreateForm(request.POST)
+        form_contact_data = json.loads(request.body)
+        data = form_contact_data['form_contact_data']
 
-        if not cart.contains_physical():
-            # disable requirements if not needed.
-            form.fields['address'].required = False
-            form.fields['postal_code'].required = False
+        order = Order.objects.create(
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            email=data['email'],
+            paid=True,
+        )
+        if cart.contains_physical():
+            # attach mailing address to order
+            order.address = data['address']
+            order.postal_code = data['postal_code']
 
-        if form.is_valid():
-            order = form.save(commit=False)
-            # apply coupon, discount if present
-            if cart.coupon:
-                order.coupon = cart.coupon
-                order.discount = cart.coupon.discount
-            order.save()
+        if cart.coupon:
+            # attach coupon
+            order.coupon = cart.coupon
+            order.discount = cart.coupon.discount
+        order.save()
 
-            # create OrderItem instances for each item in cart.
-            for item in cart:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item['product'],
-                    price=item['price'],
-                    quantity=item['quantity'],
-                )
-            # TODO do not clear cart, jsonify OrderItems
-            # clear cart
-            # cart.clear()
-            # send email asynchronously
-            # order_created.delay(order.id)
-            # set order in session
-            # redirect for payment
-            # request.session['order_id'] = order.id
-            print("here")
-            return redirect(reverse('payment:process'))
+        # create OrderItem instances for each item in cart.
+        for item in cart:
+            OrderItem.objects.create(
+                order=order,
+                product=item['product'],
+                price=item['price'],
+                quantity=item['quantity'],
+            )
+        # clear cart
+        cart.clear()
+        # send email asynchronously
+        # order_created.delay(order.id)
+
+        # display message
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             f'Order placed!',
+                             extra_tags='bg-primary text-white')
+        print("order created")
+        return redirect(reverse('shop:home'))
 
     else:
         form = OrderCreateForm()
@@ -77,6 +81,7 @@ def order_create(request):
         'create_order_form': form,
     }
     return render(request, 'orders/order/create.html', context=context)
+
 
 def order_test(request):
     """ Testing receiving data from javascript request. """

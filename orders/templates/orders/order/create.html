@@ -84,7 +84,7 @@
 
     <script type="text/javascript">
         var form = document.getElementById('form');
-        var formContactData = null
+        let formContactData = null
         csrftoken = form.getElementsByTagName('input')[0].value
         console.log("New token:", csrftoken)
 
@@ -147,7 +147,8 @@
 
         function submitPayment() {
             // submit form request.
-            const url = "{% url 'orders:order_test' %}"
+            const url = "{% url 'orders:order_create' %}"
+            console.log("submitting data. Form: ", formContactData)
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -160,7 +161,6 @@
             }).then((res) => res.json()).then((data) => {
                 console.log('Call complete.', data)
 
-                window.location.href = "{% url 'shop:home' %}"
             })
         }
 
