@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
@@ -76,6 +78,14 @@ def order_create(request):
     }
     return render(request, 'orders/order/create.html', context=context)
 
+def order_test(request):
+    """ Testing receiving data from javascript request. """
+
+    form_contact_data = json.loads(request.body)
+
+    print(f'form data: ', form_contact_data)
+
+    return HttpResponse('hello')
 
 @staff_member_required
 def admin_order_pdf(request, order_id):

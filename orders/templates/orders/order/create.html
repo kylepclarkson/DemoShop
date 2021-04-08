@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="min-vh-100">
-        <div class="container d-flex justify-content-center my-2">
+        <div class="container d-flex justify-content-center my-4">
             {% if cart.contains_physical %}
                 <h1>Please confirm your order and contact details below.</h1>
             {% else %}
@@ -56,105 +56,115 @@
         <div class="container my-5">
             <div class="row">
                 <div class="col-lg-6">
-                    <h3 class="text-center">Contact Details</h3>
-                    <form action="" class="needs-validation" method="POST">
-                        {% csrf_token %}
-                        {{ create_order_form }}
-                    </form>
+                    <div id="form-contact-wrapper">
+                        <h3 class="text-center">Contact Details</h3>
+                        <form class="needs-validation" id="form">
+                            {% csrf_token %}
+                            {{ create_order_form }}
+                            <input id="form-submit-btn" class="btn btn-success btn-block" type="submit"
+                                   value="Continue">
+                            <button class="btn btn-warning" id="make-payment">Test Pay</button>
+                        </form>
+                    </div>
                 </div>
                 <div class="col-lg-6">
-                    <h3 class="text-center mb-3">Pay with Paypal</h3>
-                    <div class="box-element" id="payment-info" class="hidden">
-                        <!-- Set up a container element for the button -->
-                        <div id="paypal-button-container"></div>
+                    <div id="paypal-wrapper" class="hidden">
+                        <h3 class="text-center mb-3">Pay with Paypal</h3>
+                        <div class="box-element" id="payment-info" class="hidden">
+                            <!-- Set up a container element for the button -->
+                            <div id="paypal-button-container"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-start my-5">
-                <a href="{% url 'cart:cart_detail' %}" class="btn btn-secondary">Back to Cart</a>
-            </div>
         </div>
-
-        {#        {% if cart.contains_physical %}#}
-        {# Show form to get mailing address. #}
-        {#            <div class="container my-5">#}
-        {#                <h3 class="text-center">Mailing Details</h3>#}
-        {#                <form action="" class="needs-validation" method="POST">#}
-        {#                    {% csrf_token %}#}
-        {#                    {{ form }}#}
-        {#                    <div class="d-flex justify-content-between my-5">#}
-        {#                        <a href="{% url 'cart:cart_detail' %}" class="btn btn-secondary">Back to Cart</a>#}
-        {#                        <input type="submit" class="btn btn-primary" value="To Payment">#}
-        {#                    </div>#}
-        {#                </form>#}
-        {#            </div>#}
-        {#        {% else %}#}
-        {# display buttons. #}
-        {#            <div class="d-flex justify-content-between my-5">#}
-        {##}
-        {#                <a href="{% url 'cart:cart_detail' %}" class="btn btn-secondary">Back to Cart</a>#}
-        {#            </div>#}
-        {#        {% endif %}#}
     </div>
     <!-- Include the PayPal JavaScript SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AdNZlEGk9DRXnyqxHrX1TtGXnZG6waft_BR1h29ZyFa9rznlSy0n_i7sdD36L_npPX30w-owj0hHt4ds&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AdNZlEGk9DRXnyqxHrX1TtGXnZG6waft_BR1h29ZyFa9rznlSy0n_i7sdD36L_npPX30w-owj0hHt4ds&currency=CAD"></script>
 
-    <script>
-        // Render the PayPal button into #paypal-button-container
+    <script type="text/javascript">
+        var form = document.getElementById('form');
+        var formContactData = null
+        csrftoken = form.getElementsByTagName('input')[0].value
+        console.log("New token:", csrftoken)
+
+        {# User submits contact details #}
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            console.log('contact form details')
+            formContactData = {
+                'first_name': form.id_first_name.value,
+                'last_name': form.id_last_name.value,
+                'email': form.id_email.value,
+                'address': form.id_address.value,
+                'postal_code': form.id_postal_code.value,
+            }
+            console.log('form data:', formContactData);
+
+            // hide contact form, show payment form
+            document.getElementById('form-contact-wrapper').classList.add('hidden')
+            document.getElementById('paypal-wrapper').classList.remove('hidden')
+        })
+        {# === End contact form details === #}
+
+        {# payment via pay pal #}
+        const total_after_discount = '{{ cart.get_total_price_after_discount }}';
         paypal.Buttons({
-
             style: {
                 color: 'blue',
                 shape: 'pill',
                 label: 'pay',
                 height: 40
             },
-            {# TODO call #}
-            // Call your server to set up the transaction
-            createOrder: function(data, actions) {
 
-                return fetch('/demo/checkout/api/paypal/order/create/', {
-                    method: 'post'
-                }).then(function(res) {
-                    return res.json();
-                }).then(function(orderData) {
-                    return orderData.id;
-                });
+            // Call your server to set up the transaction
+            createOrder: function (data, actions) {
+                console.log("Create order.")
+                console.log("Form contact data: ", formContactData)
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: parseFloat(total_after_discount).toFixed(2)
+                        }
+                    }],
+
+                    application_context: {
+                        shipping_preference: 'NO_SHIPPING'
+                    }
+                })
             },
 
             // Call your server to finalize the transaction
-            onApprove: function(data, actions) {
-                return fetch('/demo/checkout/api/paypal/order/' + data.orderID + '/capture/', {
-                    method: 'post'
-                }).then(function (res) {
-                    return res.json();
-                }).then(function (orderData) {
-                    // Three cases to handle:
-                    //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-                    //   (2) Other non-recoverable errors -> Show a failure message
-                    //   (3) Successful transaction -> Show confirmation or thank you
-
-                    // This example reads a v2/checkout/orders capture response, propagated from the server
-                    // You could use a different API or structure for your 'orderData'
-                    var errorDetail = Array.isArray(orderData.details) && orderData.details[0];
-
-                    if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
-                        return actions.restart(); // Recoverable state, per:
-                        // https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
-                    }
-
-                    if (errorDetail) {
-                        var msg = 'Sorry, your transaction could not be processed.';
-                        if (errorDetail.description) msg += '\n\n' + errorDetail.description;
-                        if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
-                        return alert(msg); // Show a failure message
-                    }
-
-                    // Show a success message
-                    alert('Transaction completed by ' + orderData.payer.name.given_name);
+            onApprove: function (data, actions) {
+                console.log("on approve. ")
+                return actions.order.capture().then(function (details) {
+                    console.log('Approved. Details: ', details)
+                    submitPayment();
                 });
             }
 
         }).render('#paypal-button-container');
+
+        function submitPayment() {
+            // submit form request.
+            const url = "{% url 'orders:order_test' %}"
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({
+                    'form_contact_data': formContactData,
+                })
+            }).then((res) => res.json()).then((data) => {
+                console.log('Call complete.', data)
+
+                window.location.href = "{% url 'shop:home' %}"
+            })
+        }
+
+        {# === end payment via paypal #}
     </script>
+
 {% endblock %}

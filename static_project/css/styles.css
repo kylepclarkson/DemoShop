@@ -4,6 +4,10 @@
     font-family: 'Chivo', sans-serif;
 }
 
+.hidden {
+    display: none;
+}
+
 #home-hero {
     background: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url("../personal/store_bg1.jpg") 50% 0 no-repeat fixed;
     height: 650px;
