@@ -61,9 +61,8 @@
                         <form class="needs-validation" id="form">
                             {% csrf_token %}
                             {{ create_order_form }}
-                            <input id="form-submit-btn" class="btn btn-success btn-block" type="submit"
+                            <input id="form-submit-btn" class="btn btn-success mt-2" type="submit"
                                    value="Continue">
-                            <button class="btn btn-warning" id="make-payment">Test Pay</button>
                         </form>
                     </div>
                 </div>
@@ -90,7 +89,11 @@
     <script src="https://www.paypal.com/sdk/js?client-id=AdNZlEGk9DRXnyqxHrX1TtGXnZG6waft_BR1h29ZyFa9rznlSy0n_i7sdD36L_npPX30w-owj0hHt4ds&currency=CAD"></script>
 
     <script type="text/javascript">
-        var form = document.getElementById('form');
+        const form = document.getElementById('form');
+        const formContactWrapper = document.getElementById('form-contact-wrapper');
+        const paypalWrapper = document.getElementById('paypal-wrapper');
+        const paymentLoading = document.getElementById('payment-loading');
+
         let formContactData = null
         csrftoken = form.getElementsByTagName('input')[0].value
         console.log("New token:", csrftoken)
@@ -109,8 +112,8 @@
             console.log('form data:', formContactData);
 
             // hide contact form, show payment form
-            document.getElementById('form-contact-wrapper').classList.add('hidden')
-            document.getElementById('paypal-wrapper').classList.remove('hidden')
+            formContactWrapper.classList.add('hidden')
+            paypalWrapper.classList.remove('hidden')
         })
         {# === End contact form details === #}
 
@@ -126,7 +129,8 @@
 
             // Call your server to set up the transaction
             createOrder: function (data, actions) {
-                document.getElementById('payment-loading').classList.remove('hidden');
+                document.getElementById('paypal-button-container').classList.remove('hidden');
+                paymentLoading.classList.remove('hidden')
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
@@ -143,11 +147,28 @@
             // Call your server to finalize the transaction
             onApprove: function (data, actions) {
                 console.log("data:", data)
+                paypalWrapper.classList.add('hidden');
                 return actions.order.capture().then(function (details) {
                     console.log('Approved. Details: ', details)
                     submitPayment(data);
                 });
-            }
+            },
+
+            // Catch-all errors
+            onError: function(err) {
+                console.log("error:", err)
+                // todo
+            },
+
+            // user cancelled payment
+            onCancel: function (data) {
+                console.log("Cancel. data:", data)
+                // reshow form
+                paypalWrapper.classList.add('hidden')
+                paymentLoading.classList.add('hidden')
+                formContactWrapper.classList.remove('hidden')
+
+            },
 
         }).render('#paypal-button-container');
 

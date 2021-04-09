@@ -11,7 +11,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 
-from .models import OrderItem, Order
+from .models import OrderItem, Order, Product
 from .forms import OrderCreateForm
 from cart.cart import Cart
 from .tasks import order_created
@@ -52,6 +52,7 @@ def order_create(request):
         order.save()
 
         # create OrderItem instances for each item in cart.
+        # decrease quantity of items
         for item in cart:
             OrderItem.objects.create(
                 order=order,
@@ -59,6 +60,11 @@ def order_create(request):
                 price=item['price'],
                 quantity=item['quantity'],
             )
+
+            # product = Product.objects.get(id=item['product'].id)
+            # product.quantity -= item['quantity']
+            # product.save()
+
         # clear cart
         cart.clear()
         # send email asynchronously

@@ -30,7 +30,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     # use DecimalField instead of float to avoid rounding issues.
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=0)
+    # quantity = models.PositiveIntegerField(default=0)
     # false if product cannot be bought.
     available = models.BooleanField(default=True)
     # These items will require a mailing address.

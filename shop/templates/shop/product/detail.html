@@ -55,7 +55,7 @@
                     <form action="{% url "cart:cart_add" product.id %}" method="POST">
                         {% csrf_token %}
                         {{ cart_product_form }}
-                        <input class="btn btn-md btn-outline-secondary" type="submit"
+                        <input class="btn btn-md btn-outline-success" type="submit"
                                value="Add to cart">
                     </form>
                 {% else %}
