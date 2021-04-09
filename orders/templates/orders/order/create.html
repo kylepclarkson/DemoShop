@@ -191,7 +191,7 @@
                 })
             }).then((res) => res.json()).then((data) => {
                 console.log('Call complete.', data)
-                window.location.href = "{% url 'shop:home' %}"
+                window.location.href = "{% url 'orders:order-success' %}"
             })
         }
 

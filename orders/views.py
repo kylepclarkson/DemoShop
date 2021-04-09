@@ -2,6 +2,7 @@ import json
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_POST
 from django.urls import reverse
 from django.contrib import messages
 from django.http import JsonResponse
@@ -40,10 +41,13 @@ def order_create(request):
             paid=True,
             order_id=order_id,
         )
+
         if cart.contains_physical():
             # attach mailing address to order
             order.address = form_contact_data['address']
             order.postal_code = form_contact_data['postal_code']
+        else:
+            order.is_digital = True
 
         if cart.coupon:
             # attach coupon
@@ -70,11 +74,10 @@ def order_create(request):
         # send email asynchronously
         # order_created.delay(order.id)
 
+        # save order to session
+        request.session['order_pk'] = order.pk
+
         # display message
-        messages.add_message(request,
-                             messages.SUCCESS,
-                             f'Order placed! Check your email for a confirmation shortly.',
-                             extra_tags='bg-success text-white')
         print("order created")
         return JsonResponse('Payment complete', safe=False)
 
@@ -93,6 +96,15 @@ def order_create(request):
     return render(request, 'orders/order/create.html', context=context)
 
 
+def order_success(request):
+    order = Order.objects.get(pk=request.session.get('order_pk'))
+    context = {
+        'order': order,
+    }
+
+    return render(request, 'orders/order/success.html', context=context)
+
+
 def order_test(request):
     """ Testing receiving data from javascript request. """
 
@@ -101,6 +113,7 @@ def order_test(request):
     print(f'form data: ', form_contact_data)
 
     return HttpResponse('hello')
+
 
 @staff_member_required
 def admin_order_pdf(request, order_id):

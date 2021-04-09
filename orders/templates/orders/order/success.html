@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    | Order Success
+{% endblock %}
+
+{% block content %}
+    <div class="min-vh-100 container">
+        <h1 class="mt-5 text-center fs-1">Order Successfully Created!</h1>
+        <hr>
+        <h3>Thank your for your order!</h3>
+        <div class="mt-5 fs-4">
+            <p>
+                Hi {{ order.first_name }}, we really appreciate your business! Here is your order's ID:
+                <strong><mark>{{ order.order_id }}</mark></strong>; please make note of this for any inquires you may have.
+            </p>
+            {% if not order.is_digital %}
+                <p>
+                    You will receive an email at <strong>{{ order.email }}</strong>
+                    when your order is sent.
+                </p>
+            {% endif %}
+
+            <p>- The DemoShop</p>
+        </div>
+    </div>
+{% endblock %}
