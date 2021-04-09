@@ -21,29 +21,30 @@
             </p>
             <p>
                 <a href="{% url 'shop:product_list' %}" class="btn btn-lg btn-primary my-2">All Products</a>
-                <a href="#featured" class="btn btn-lg btn-secondary my-2">Featured Items</a>
+                <a href="#featured" class="btn btn-lg btn-success my-2">Featured Items</a>
             </p>
         </div>
     </div>
 
     {# === Featured items === #}
-    <div class="container min-vh-100 pt-5" id="featured">
-        <div class="mx-auto text-center my-3">
+    <div class="container my-5" id="featured">
+        <div class="row text-center my-3">
             <h1 class="fw-light">Featured Items</h1>
             <p>View Our Featured Items Below</p>
             <hr>
         </div>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="row">
             {% for product in featured %}
-                {% include 'shop/product/product_card.html' %}
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 p-2">
+                    {% include 'shop/product/product_card.html' %}
+                </div>
             {% endfor %}
         </div>
     </div> {# ===== End featured ===== #}
 
-
     {# ===== About Section ===== #}
-    <div class="container min-vh-100 py-3">
-        <div class="mx-auto text-center my-3">
+    <div class="container mb-5">
+        <div class="mx-auto text-center">
             <h1 class="fw-light">Who We Are</h1>
             <p>More than just a company</p>
             <hr>

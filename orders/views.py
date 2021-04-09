@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
 from django.contrib import messages
+from django.http import JsonResponse
 
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -27,19 +28,22 @@ def order_create(request):
         return redirect('shop:product_list')
 
     if request.method == "POST":
-        form_contact_data = json.loads(request.body)
-        data = form_contact_data['form_contact_data']
+        data = json.loads(request.body)
+        print("data:", data)
+        form_contact_data = data['form_contact_data']
+        order_id = data['order_id']
 
         order = Order.objects.create(
-            first_name=data['first_name'],
-            last_name=data['last_name'],
-            email=data['email'],
+            first_name=form_contact_data['first_name'],
+            last_name=form_contact_data['last_name'],
+            email=form_contact_data['email'],
             paid=True,
+            order_id=order_id,
         )
         if cart.contains_physical():
             # attach mailing address to order
-            order.address = data['address']
-            order.postal_code = data['postal_code']
+            order.address = form_contact_data['address']
+            order.postal_code = form_contact_data['postal_code']
 
         if cart.coupon:
             # attach coupon
@@ -63,10 +67,10 @@ def order_create(request):
         # display message
         messages.add_message(request,
                              messages.SUCCESS,
-                             f'Order placed!',
-                             extra_tags='bg-primary text-white')
+                             f'Order placed! Check your email for a confirmation shortly.',
+                             extra_tags='bg-success text-white')
         print("order created")
-        return redirect(reverse('shop:home'))
+        return JsonResponse('Payment complete', safe=False)
 
     else:
         form = OrderCreateForm()

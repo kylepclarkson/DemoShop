@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}
     | Checkout
 {% endblock %}
@@ -55,7 +55,7 @@
 
         <div class="container my-5">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div id="form-contact-wrapper">
                         <h3 class="text-center">Contact Details</h3>
                         <form class="needs-validation" id="form">
@@ -67,13 +67,20 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div id="paypal-wrapper" class="hidden">
                         <h3 class="text-center mb-3">Pay with Paypal</h3>
-                        <div class="box-element" id="payment-info" class="hidden">
+                        <div class="box-element text-center" id="payment-info">
                             <!-- Set up a container element for the button -->
                             <div id="paypal-button-container"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="payment-loading" class="text-center hidden">
+                        <img src="{% static 'icons/loading.gif' %}" alt="">
                     </div>
                 </div>
             </div>
@@ -119,8 +126,7 @@
 
             // Call your server to set up the transaction
             createOrder: function (data, actions) {
-                console.log("Create order.")
-                console.log("Form contact data: ", formContactData)
+                document.getElementById('payment-loading').classList.remove('hidden');
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
@@ -136,31 +142,35 @@
 
             // Call your server to finalize the transaction
             onApprove: function (data, actions) {
-                console.log("on approve. ")
+                console.log("data:", data)
                 return actions.order.capture().then(function (details) {
                     console.log('Approved. Details: ', details)
-                    submitPayment();
+                    submitPayment(data);
                 });
             }
 
         }).render('#paypal-button-container');
 
-        function submitPayment() {
+        function submitPayment(data) {
             // submit form request.
             const url = "{% url 'orders:order_create' %}"
-            console.log("submitting data. Form: ", formContactData)
+            console.log("Submit payment. Data:", data)
+            let orderID = data.orderID
+            console.log("Order id:", orderID)
             fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken,
+                    'Accept': 'application/json',
                 },
                 body: JSON.stringify({
                     'form_contact_data': formContactData,
+                    'order_id': orderID,
                 })
             }).then((res) => res.json()).then((data) => {
                 console.log('Call complete.', data)
-
+                window.location.href = "{% url 'shop:home' %}"
             })
         }
 

@@ -1,7 +1,7 @@
 {#  === displays product details in card === #}
 {# Has access to 'product' from view which is an instance of the Product model. #}
 {% load thumbnail %}
-<div class="card shadow-md">
+<div class="card shadow-md h-100">
     {# === card image === #}
     <div class="text-center">
         <a href="{{ product.get_absolute_url }}">
@@ -26,12 +26,12 @@
     <div class="card-footer my-1 bg-transparent">
         <div class="d-flex justify-content-between">
             <a href="{{ product.get_absolute_url }}"
-               class="btn btn-md btn-outline-secondary">View</a>
+               class="btn btn-md btn-outline-primary">View</a>
             {% if product.available %}
                 <form action="{% url "cart:cart_add" product.id %}" method="POST">
                     {% csrf_token %}
                     {{ cart_product_form }}
-                    <input class="btn btn-md btn-outline-primary" type="submit"
+                    <input class="btn btn-md btn-outline-success" type="submit"
                            value="Add to cart">
                 </form>
             {% else %}
