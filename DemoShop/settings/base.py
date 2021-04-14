@@ -27,7 +27,9 @@ SECRET_KEY = pirkeys.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -138,32 +140,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 
 
-
 # ===== Cart session =====
 CART_SESSION_ID = 'cart'
 
-# ===== Braintree configuration =====
-BRAINTREE_MERCHANT_ID = pirkeys.BRAINTREE_MERCHANT_ID
-BRAINTREE_PUBLIC_KEY = pirkeys.BRAINTREE_PUBLIC_KEY
-BRAINTREE_PRIVATE_KEY = pirkeys.BRAINTREE_PRIVATE_KEY
 
-BRAINTREE_CONF = braintree.Configuration(
-    braintree.Environment.Sandbox,
-    merchant_id=BRAINTREE_MERCHANT_ID,
-    public_key=BRAINTREE_PUBLIC_KEY,
-    private_key=BRAINTREE_PRIVATE_KEY,
-)
-
-# === email backend ===
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = pirkeys.EMAIL_HOST_USER
-    EMAIL_HOST_PASSWORD = pirkeys.EMAIL_HOST_PASSWORD
-
-    DEFAULT_FROM_EMAIL = pirkeys.EMAIL_HOST_USER
 

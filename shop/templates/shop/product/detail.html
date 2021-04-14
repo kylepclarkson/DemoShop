@@ -12,7 +12,7 @@
             {# === product image === #}
             <div class="col-md-8 mb-2">
                 {% thumbnail product.image "750x500" crop='center' as im %}
-                    <img class="img-fluid rounded" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    <img class="img-fluid rounded" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ product.name }}">
                 {% endthumbnail %}
             </div>
             {# === end product image === #}

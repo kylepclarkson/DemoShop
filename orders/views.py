@@ -72,7 +72,7 @@ def order_create(request):
         # clear cart
         cart.clear()
         # send email asynchronously
-        # order_created.delay(order.id)
+        order_created(order.id)
 
         # save order to session
         request.session['order_pk'] = order.pk
